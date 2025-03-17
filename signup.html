@@ -150,7 +150,14 @@
             validateEmail(email);
 
             let resultBox = document.getElementById("signup_result");
-            resultBox.innerHTML = errors.length ? errors.join("<br>") : "Signup successful! Redirecting to Login page...";
+            if (errors.length > 0) {
+                resultBox.innerHTML = errors.join("<br>");
+            } else {
+                resultBox.innerHTML = "Signup successful! Redirecting to Login page...";
+                setTimeout(() => {
+                    window.location.href = "./login.html";
+                }, 2000);
+            }        
         }
                 
  
