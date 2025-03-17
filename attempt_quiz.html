@@ -5,6 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attempt Quiz - LMS</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <script>
+        //////////////////////////////////
+        //-------- Quiz Timer ---------//
+        ////////////////////////////////
+        
+        let timeLeft = 60*10; // 10 minutes
+
+
+        function timer(){
+
+            // Go to leaderboard when timer runs out
+            if (timeLeft <= 0) {
+                window.location.href = "./leaderboard.html";
+            }
+
+            // Calculate and properly format min and sec
+            let min = Math.floor(timeLeft / 60); 
+            let sec = timeLeft  % 60; 
+            min = min < 10 ? "0" + min : min;
+            sec = sec < 10 ? "0"+sec : sec; 
+
+            document.getElementById("timer").textContent = `Timer: ${min}:${sec}`;
+
+            timeLeft--;
+
+        }
+
+        setInterval(timer, 1000);
+
+
+        /////////////////////////////////////////////////////
+        //------ Answer Validation & Score Calculation----//
+        ///////////////////////////////////////////////////
+        let score = 0; 
+        let q1Answered = false;
+        let q2Answered = false;  
+
+        function updateScore(){
+            document.getElementById("score").textContent = `Score: ${score}/100`;
+        }
+
+        function submitQ1(){
+            let q1a = document.getElementById("q1a");
+            let q1b = document.getElementById("q1b");
+
+            // Checking to make sure its not an empty answer and that they havent already submitted for the question
+            if (!(q1a.checked) && !(q1b.checked)){
+                alert("Incomplete Answer: You must choose an option for question 1");
+                return; 
+            }
+            if (q1Answered){
+                alert("You've already submitted an answer for question 1");
+                return;
+            }
+
+            // Give 50 points for correct answer of "Hyper Text Markup Language"
+            if (q1a.checked){
+                score += 50; 
+            }
+
+            q1Answered = true; 
+            updateScore();
+        }
+
+        
+        function submitQ2(){
+            let q2a = document.getElementById("q2a");
+            let q2b = document.getElementById("q2b");
+
+            // Checking to make sure its not an empty answer and that they havent already submitted for the question
+            if (!(q2a.checked) && !(q2b.checked)){
+                alert("Incomplete Answer: You must choose an option for question 2");
+                return; 
+            }
+            if (q2Answered){
+                alert("You've already submitted an answer for question 2");
+                return;
+            }
+
+            // Give 25 points for each selected(both are correct)
+            if (q2a.checked){
+                score += 25; 
+            }
+            if (q2b.checked){
+                score += 25; 
+            }
+            q2Answered = true; 
+            updateScore();
+        }
+
+
+
+        
+        
+
+
+    </script>
+
+
 </head>
 <body>
     <header>
@@ -25,6 +125,10 @@
             <p>Topic: HTML Basics</p>
             <p>Deadline: 11:59 PM, February 10, 2025</p>
             <p>Attempts Allowed: 1</p>
+
+            <div id="timer" style="font-weight: bold; font-size: 24px;">Timer: 10:00</div> <!-- div that is updated with countdown timer-->
+            <div id="score" style="font-weight: bold; font-size: 24px;">Score: /100</div> <!-- div that is updated with score-->
+
         </div>
         
         <h3>Question 1</h3>
@@ -36,7 +140,7 @@
             <label for="q1b">Home Tool Markup Language</label><br>
         </div>
         <br>
-        <button class="ans">Submit Answer</button>
+        <button class="ans" onclick="submitQ1()">Submit Answer</button>
         
         <h3>Question 2</h3>
         <p>Which of the following are HTML elements? (Select all that apply)</p>
@@ -47,7 +151,7 @@
         <label for="q2b">&lt;span&gt;</label><br>
         </div>
         <br>
-        <button class="ans">Submit Answer</button>
+        <button class="ans" onclick="submitQ2()">Submit Answer</button>
         
         <br><br>
         <a href="leaderboard.html">
