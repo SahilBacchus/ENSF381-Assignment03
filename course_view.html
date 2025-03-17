@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course View - LMS</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script>
+        function addCourse(event) {
+            let enrolledCourses = document.getElementById("enrolled");
+            console.log(enrolledCourses.rows)
+            let rows = enrolledCourses.rows;
+            let lastRow = rows[rows.length - 1];
+            console.log(lastRow)
+            console.log(lastRow.length)
+            let pendingCourse = event.target.parentElement;
+            let newCourse;
+
+            // Construct the course to be added
+            let elements = pendingCourse.children;
+            courseName = elements[1].innerHTML;
+            courseCode = elements[2].innerHTML;
+            newCourseHTML = `<div>\n<img src=\"course1.jpg\" alt=\"Course 1\">\n<p>${courseName}</p>\n<p>${courseCode}</p>\n<a href=\"attempt_quiz.html\">Attempt Quiz</a>\n</div>`;
+
+            if (lastRow.children.length < 3) {
+                // Add pending course to this row
+                console.log("less than 3");
+                newCourse = lastRow.insertCell(-1);
+                newCourse.innerHTML = newCourseHTML;
+            } else {
+                // Make a new row and add the pending course
+                console.log("greater than 3");
+                let newRow = enrolledCourses.insertRow(-1);
+                newCourse = newRow.insertCell(-1)
+                newCourse.innerHTML = newCourseHTML;
+            }
+            pendingCourse.parentElement.remove();
+        }
+
+        function deleteCourse(event) {
+            event.target.parentElement.parentElement.remove();
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -31,7 +67,7 @@
             <!-- Display Course 1, 2, and 3 in the same line -->
             <h2>Enrolled Courses</h2>
             <hr>
-            <table class="cv">
+            <table class="cv" id="enrolled">
 				<tr>
 					<td>
 						<div>
@@ -89,15 +125,15 @@
             <!-- Display Course 1, 2, and 3 in the same line -->
             <h2>Pending Invitations</h2>
             <hr>
-            <table class="cv">
+            <table class="cv" id="pending">
 				<tr>
 					<td>
                         <div>
                             <img src="course2.jpg" alt="Course 2">
                             <p>Course Name: Data Science</p>
                             <p>Course Code: DS102</p>
-                            <button class="accept">Accept</button>
-                            <button class="decline">Decline</button>
+                            <button class="accept" onclick="addCourse(event)">Accept</button>
+                            <button class="decline" onclick="deleteCourse(event)">Decline</button>
                         </div>
                     </td> 
                     <td>
@@ -105,8 +141,8 @@
                             <img src="course2.jpg" alt="Course 2">
                             <p>Course Name: Machine Learning</p>
                             <p>Course Code: ML105</p>
-                            <button class="accept">Accept</button>
-                            <button class="decline">Decline</button>
+                            <button class="accept" onclick="addCourse(event)">Accept</button>
+                            <button class="decline" onclick="deleteCourse(event)">Decline</button>
                         </div>
                     </td> 
                 </tr>
